@@ -26,28 +26,33 @@ class Roulette
   def play(num)
     @num.sample
   end
+
   def to_s
     "#{@num}"
   end
+  def self.write_data
+    r = (1..10).to_a
+    file = File.open('roulette_history.txt', 'w')
+    file.puts r.sample
+    file.close
+  end
+  def self.load_data
+    file = File.open('roulette_history.txt', 'r')
+    data = file.read
+    file.close
+    return data
+  end
 end
 r = (1..10).to_a
-
-
-file = File.open('roulette_history.txt', 'w')
-file.puts r.sample
-file.close
-
-file = File.open('roulette_history.txt', 'r')
-data = file.read
-file.close
-
-
 roe = Roulette.new(*r)
+Roulette.write_data
 a = roe.play(r)
-puts a
-puts data
+puts "el numero apostado es #{a}"
+data = Roulette.load_data
+puts "el numero ganador es : #{data}"
 if a.to_i == data.to_i
   file = File.open('winners.txt', 'a')
   file.puts a
+  puts 'You had won'
   file.close
 end
